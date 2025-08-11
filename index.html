@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EduMentor AI Tutor</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0; padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #f8f9fc;
+      color: #333;
+    }
+
+    /* Header */
+    header {
+      background: #1e3a8a;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    header h1 {
+      font-size: 1.6rem;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    nav a:hover {
+      color: #facc15;
+    }
+
+    /* Hero Section */
+    .hero {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      text-align: center;
+      padding: 60px 20px;
+    }
+    .hero h2 {
+      font-size: 2.2rem;
+      margin-bottom: 10px;
+    }
+    .hero p {
+      font-size: 1.1rem;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      background: white;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    }
+    textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      font-size: 1rem;
+      resize: none;
+      outline: none;
+      margin-bottom: 15px;
+    }
+    .btn-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    button {
+      background: #1e3a8a;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      color: white;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    button:hover {
+      background: #2a4ec5;
+    }
+    h2 {
+      font-size: 1.4rem;
+      margin-top: 20px;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 5px;
+    }
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      background: #f3f4f6;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+
+    /* Footer */
+    footer {
+      background: #1e3a8a;
+      color: white;
+      text-align: center;
+      padding: 20px 10px;
+      margin-top: 50px;
+    }
+    footer a {
+      color: #facc15;
+      text-decoration: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      nav ul {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .btn-group {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header>
+    <h1>EduMentor AI</h1>
+    <nav>
+      <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">Features</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <h2>Your AI-powered Learning Companion</h2>
+    <p>Summarize notes, generate MCQs, and learn smarter with EduMentor AI Tutor.</p>
+  </section>
+
+  <!-- MAIN CONTENT -->
+  <main>
+    <div class="container">
+      <textarea id="inputText" placeholder="Paste or speak your study text..."></textarea>
+      <div class="btn-group">
+        <button onclick="recordVoice()">🎤 Speak</button>
+        <button onclick="submitText()">✨ Summarize</button>
+      </div>
+      <h2>📝 Summary</h2>
+      <p id="summary">Your summary will appear here...</p>
+      <h2>❓ MCQs</h2>
+      <ul id="mcqs"></ul>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>© 2025 EduMentor AI. All Rights Reserved. | <a href="#">Privacy Policy</a></p>
+  </footer>
+
+  <script src="/static/voice.js"></script>
+  <script>
+    async function submitText() {
+      const text = document.getElementById("inputText").value;
+      const res = await fetch('/summarize', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: 'text=' + encodeURIComponent(text)
+      });
+      const data = await res.json();
+      document.getElementById('summary').innerText = data.summary;
+      document.getElementById('mcqs').innerHTML = data.mcqs.map(mcq =>
+        <li><strong>${mcq.question}</strong><br>Options: ${mcq.options.join(', ')}</li>
+      ).join('');
+    }
+  </script>
+
+</body>
+</html>
+
+/* changes improve css */
